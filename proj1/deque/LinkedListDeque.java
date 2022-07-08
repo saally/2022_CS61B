@@ -1,5 +1,7 @@
 package deque;
 
+import java.util.Iterator;
+
 public class LinkedListDeque<T> implements Iterable<T> {
     private class DequeNode {
         public T item;
@@ -13,12 +15,11 @@ public class LinkedListDeque<T> implements Iterable<T> {
     private DequeNode sentinel;
     private int size;
 
-    public LinkedListDeque(T item) {
+    public LinkedListDeque() {
         sentinel = new DequeNode(null);
-        DequeNode newItem = new DequeNode(item);
-        sentinel.prev = newItem;
-        sentinel.next = newItem;
-        size = 1;
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
+        size = 0;
     }
 
     public void addFirst(T item) {
@@ -48,7 +49,7 @@ public class LinkedListDeque<T> implements Iterable<T> {
     }
 
     public boolean isEmpty() {
-        return sentinel.next == null;
+        return size() == 0;
     }
 
     public int size() {
@@ -58,16 +59,19 @@ public class LinkedListDeque<T> implements Iterable<T> {
     public void printDeque() {
         StringBuilder str = new StringBuilder();
         DequeNode curr = sentinel.next;
-        while (curr != null && curr.next != null) {
-            str.append(curr.item.toString() + ' ');
+        while (curr != null && curr.next != sentinel) {
+            str.append(curr.item);
+            str.append(' ');
             curr = curr.next;
         }
-        str.append(curr.item.toString());
+        if (curr != null && curr.item != null) {
+            str.append(curr.item);
+        }
         System.out.println(str);
         System.out.println();
     }
 
-    private T removeNode(DequeNode n) {
+    private void removeNode(DequeNode n) {
         DequeNode prevNode = n.prev;
         DequeNode nextNode = n.next;
         prevNode.next = nextNode;
@@ -77,7 +81,7 @@ public class LinkedListDeque<T> implements Iterable<T> {
 
     public T removeFirst() {
         DequeNode NodeToRemove = sentinel.next;
-        if (NodeToRemove == null) {
+        if (NodeToRemove == sentinel) {
             return null;
         }
         removeNode(NodeToRemove);
@@ -86,7 +90,7 @@ public class LinkedListDeque<T> implements Iterable<T> {
 
     public T removeLast() {
         DequeNode NodeToRemove = sentinel.prev;
-        if (NodeToRemove == null) {
+        if (NodeToRemove == sentinel) {
             return null;
         }
         removeNode(NodeToRemove);
@@ -106,17 +110,60 @@ public class LinkedListDeque<T> implements Iterable<T> {
     }
 
     public Iterator<T> iterator() {
-
+        return new LinkedListDequeIterator();
     }
 
-    public boolean equals(Object o) {
-        if (!(o instanceof LinkedListDeque)) {
-            return false;
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private DequeNode curr = sentinel.next;
+        public boolean hasNext() {
+            return curr != null;
         }
-        if (this.size != o.size) {
-            return false;
+        public T next() {
+            DequeNode returnedNode = curr;
+            curr = curr.next;
+            return returnedNode.item;
         }
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+        LinkedListDeque other = (LinkedListDeque<T>) o;
+        if (this.size() != other.size()) {
+            return false;
+        }
+        Iterator<T> thisIterator = new LinkedListDequeIterator();
+        Iterator<T> otherIterator = other.iterator();
+        while (thisIterator.hasNext()){
+            T currItem = thisIterator.next();
+            T otherItem = otherIterator.next();
+            if (currItem != otherItem) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public T getRecursive(int index) {
+        return getRecursiveHelper(sentinel.next, index);
+    }
+
+    private T getRecursiveHelper(DequeNode currNode, int index) {
+        if (index == 0 && currNode != null) {
+            return currNode.item;
+        }
+        if (currNode == null) {
+            return null;
+        }
+        return getRecursiveHelper(currNode.next, index-1);
     }
 
 
