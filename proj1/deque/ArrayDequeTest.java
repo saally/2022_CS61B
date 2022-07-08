@@ -121,4 +121,19 @@ public class ArrayDequeTest {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
     }
+
+    @Test
+    public void equalsTest() {
+        ArrayDeque<String> a = new ArrayDeque<>();
+        a.addFirst("a");
+        a.addFirst("b");
+        a.addFirst("c");
+
+        ArrayDeque<String> b = new ArrayDeque<>();
+        b.addFirst("a");
+        b.addFirst("b");
+        b.addFirst("c");
+
+        assertTrue("two deques are the same", a.equals(b));
+    }
 }
