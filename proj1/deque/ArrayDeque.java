@@ -102,6 +102,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return currIndex != nextLast;
         }
         public T next() {
+            if (!hasNext()) {
+                return null;
+            }
             T returnedItem = get(currIndex);
             currIndex = (currIndex + 1) % items.length;
             return returnedItem;
@@ -112,7 +115,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (this == o) {
             return true;
         }
-        if (this.getClass() != o.getClass()) {
+        if (!(o instanceof Deque)) {
             return false;
         }
         ArrayDeque other = (ArrayDeque<T>) o;

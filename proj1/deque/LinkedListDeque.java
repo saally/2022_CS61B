@@ -85,12 +85,12 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public T removeLast() {
-        DequeNode NodeToRemove = sentinel.prev;
-        if (NodeToRemove == sentinel) {
+        DequeNode nodeToRemove = sentinel.prev;
+        if (nodeToRemove == sentinel) {
             return null;
         }
-        removeNode(NodeToRemove);
-        return NodeToRemove.item;
+        removeNode(nodeToRemove);
+        return nodeToRemove.item;
     }
 
     public T get(int index) {
@@ -115,6 +115,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return curr != null;
         }
         public T next() {
+            if (!(hasNext())) {
+                return null;
+            }
             DequeNode returnedNode = curr;
             curr = curr.next;
             return returnedNode.item;
@@ -161,6 +164,4 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
         return getRecursiveHelper(currNode.next, index - 1);
     }
-
-
 }
