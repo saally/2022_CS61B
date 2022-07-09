@@ -2,10 +2,10 @@ package deque;
 
 import java.util.Comparator;
 
-public class MaxArrayDeque<T> extends ArrayDeque {
+public class MaxArrayDeque<T> extends ArrayDeque<T> {
     private Comparator<T> defaultComparator;
     public MaxArrayDeque(Comparator<T> c) {
-        Comparator defaultComparator = c;
+        defaultComparator = c;
     }
     public T max() {
         return max(defaultComparator);
