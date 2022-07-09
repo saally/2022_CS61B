@@ -97,16 +97,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     private class ArrayDequeIterator implements Iterator<T> {
-        int currIndex = (nextFirst + 1) % items.length;
+        int currIndex = 0;
         public boolean hasNext() {
-            return currIndex != nextLast;
+            return currIndex < size();
         }
         public T next() {
             if (!hasNext()) {
                 return null;
             }
             T returnedItem = get(currIndex);
-            currIndex = (currIndex + 1) % items.length;
+            currIndex += 1;
             return returnedItem;
         }
     }
